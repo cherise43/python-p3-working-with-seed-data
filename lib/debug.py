@@ -15,5 +15,19 @@ if __name__ == '__main__':
     Session = sessionmaker(bind=engine)
     session = Session()
 
+    print("Seeding games...")
 
-    import ipdb; ipdb.set_trace()
+    games = [
+        Game(
+            title=fake.name(),
+            genre=fake.word(),
+            platform=fake.word(),
+            price=random.randint(0, 60)
+        )
+    for i in range(50)]
+
+    session.query(Game).delete()
+    session.commit()
+    
+    session.bulk_save_objects(games)
+    session.commit()
